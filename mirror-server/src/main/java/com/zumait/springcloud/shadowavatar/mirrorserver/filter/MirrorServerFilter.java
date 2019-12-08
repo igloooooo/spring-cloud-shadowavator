@@ -4,7 +4,7 @@ import com.netflix.util.Pair;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import com.zumait.springcloud.shadowavatar.mirrorserver.ShadowAvatarConstant;
+import com.zumait.springcloud.shadowavatar.common.ShadowAvatarConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

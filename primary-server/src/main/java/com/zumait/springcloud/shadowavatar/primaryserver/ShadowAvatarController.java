@@ -50,4 +50,10 @@ public class ShadowAvatarController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/register/{appName}", method = RequestMethod.DELETE)
+    public ResponseEntity registerMirror(@PathVariable String appName) {
+        routerMapperService.unRegisterMirrorServer(appName);
+        return ResponseEntity.ok().build();
+    }
+
 }
