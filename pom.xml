@@ -12,6 +12,7 @@
         <module>common</module>
         <module>primary-server</module>
         <module>mirror-server</module>
+        <module>example</module>
     </modules>
 
     <parent>

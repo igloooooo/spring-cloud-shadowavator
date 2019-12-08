@@ -1,7 +1,6 @@
 package com.zumait.springcloud.shadowavatar.primaryserver;
 
-import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorRoute;
-import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorServerService;
+import com.zumait.springcloud.shadowavatar.primaryserver.service.MirrorServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.filters.RefreshableRouteLocator;
@@ -10,9 +9,7 @@ import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties.ZuulRoute;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 

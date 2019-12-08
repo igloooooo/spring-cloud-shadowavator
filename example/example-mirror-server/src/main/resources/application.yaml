@@ -1,0 +1,12 @@
+server:
+  port: 8740
+spring:
+  application:
+    name: mirror-server
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8700/eureka/}
+    registerWithEureka: true
+    fetchRegistry: true

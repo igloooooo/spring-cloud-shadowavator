@@ -2,8 +2,8 @@ package com.zumait.springcloud.shadowavatar.primaryserver.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorServer;
-import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorServerService;
+import com.zumait.springcloud.shadowavatar.common.router.MirrorServer;
+import com.zumait.springcloud.shadowavatar.primaryserver.service.MirrorServerService;
 import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorTraceIDMapperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
