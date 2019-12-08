@@ -1,7 +1,7 @@
 package com.zumait.springcloud.shadowavatar.primaryserver;
 
 import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorServer;
-import com.zumait.springcloud.shadowavatar.primaryserver.router.RouterMapperService;
+import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
@@ -20,7 +20,7 @@ public class ShadowAvatarController {
     private DiscoveryClient discovery;
 
     @Autowired
-    private RouterMapperService routerMapperService;
+    private MirrorServerService routerMapperService;
 
     @Value("${spring.application.name}")
     private String appName;
@@ -46,7 +46,7 @@ public class ShadowAvatarController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity registerMirror(@RequestBody MirrorServer mirrorServer) {
-        routerMapperService.registerRoute(mirrorServer);
+        routerMapperService.registerMirrorServer(mirrorServer);
         return ResponseEntity.ok().build();
     }
 

@@ -1,4 +1,4 @@
-package com.zumait.springcloud.shadowavatar.primaryserver.router;
+package com.zumait.springcloud.shadowavatar.common.router;
 
 import java.util.LinkedList;
 import java.util.List;

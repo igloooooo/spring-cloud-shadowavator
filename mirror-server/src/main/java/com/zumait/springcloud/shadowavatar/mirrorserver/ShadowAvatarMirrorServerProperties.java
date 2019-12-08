@@ -1,25 +1,22 @@
-package com.zumait.springcloud.shadowavatar.primaryserver;
+package com.zumait.springcloud.shadowavatar.mirrorserver;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author Nicholas Zhu
- */
-@ConfigurationProperties("shadowavatar.primaryserver")
-public class ShadowAvatarPrimaryServerProperties {
-    private Boolean checkMirrorServer;
+@ConfigurationProperties("shadowavatar.mirrorserver")
+public class ShadowAvatarMirrorServerProperties {
+    private String primaryServer;
     private boolean acceptAllSslCertificates;
     private boolean securePortEnabled;
 
-    public Boolean getCheckMirrorServer() {
-        return checkMirrorServer;
+    public String getPrimaryServer() {
+        return primaryServer;
     }
 
-    public void setCheckMirrorServer(Boolean checkMirrorServer) {
-        this.checkMirrorServer = checkMirrorServer;
+    public void setPrimaryServer(String primaryServer) {
+        this.primaryServer = primaryServer;
     }
 
-    public boolean getAcceptAllSslCertificates() {
+    public boolean isAcceptAllSslCertificates() {
         return acceptAllSslCertificates;
     }
 
@@ -27,7 +24,7 @@ public class ShadowAvatarPrimaryServerProperties {
         this.acceptAllSslCertificates = acceptAllSslCertificates;
     }
 
-    public boolean getSecurePortEnabled() {
+    public boolean isSecurePortEnabled() {
         return securePortEnabled;
     }
 
