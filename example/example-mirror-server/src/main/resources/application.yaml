@@ -16,3 +16,6 @@ zuul:
     service2:
       path: /service2/**
       url: http://localhost:8920/
+
+mirrorserver:
+  primaryserver: http://localhost:8730

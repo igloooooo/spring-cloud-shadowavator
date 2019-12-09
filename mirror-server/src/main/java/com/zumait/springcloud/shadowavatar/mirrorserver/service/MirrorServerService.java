@@ -25,7 +25,7 @@ public class MirrorServerService {
     @Value("${spring.application.name}")
     private String appName;
 
-    @Value("${spring.application.port}")
+    @Value("${server.port}")
     private String port;
 
     @Autowired
