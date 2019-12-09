@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(ShadowAvatarMirrorServerMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties(ShadowAvatarMirrorServerProperties.class)
-@ConditionalOnProperty(value = "spring.cloud.netflix.shadowavatar.mirrorserver.enabled",
+@ConditionalOnProperty(value = "shadowavatar.mirrorserver.enabled",
         matchIfMissing = true)
 public class ShadowAvatarMirrorServerAutoConfiguration {
 

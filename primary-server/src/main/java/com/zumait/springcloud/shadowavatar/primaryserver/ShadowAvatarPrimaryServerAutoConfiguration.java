@@ -63,7 +63,7 @@ public class ShadowAvatarPrimaryServerAutoConfiguration {
     }
 
     @Bean
-    public ShadowAvatarController sidecarController() {
+    public ShadowAvatarController shadowAvatarController() {
         return new ShadowAvatarController();
     }
 
