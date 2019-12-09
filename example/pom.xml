@@ -21,6 +21,10 @@
 	<modules>
 		<module>example-primary-server</module>
 		<module>example-mirror-server</module>
+		<module>eureka-server</module>
+		<module>qa-service-1</module>
+		<module>qa-service-2</module>
+		<module>dev-service-2</module>
 	</modules>
 
 </project>
