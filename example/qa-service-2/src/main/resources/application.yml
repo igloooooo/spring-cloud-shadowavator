@@ -23,6 +23,6 @@ eureka:
     registerWithEureka: true
     healthcheck:
           enabled: false
-#ribbon:
-#  eureka:
-#    enabled: true
+ribbon:
+  eureka:
+    enabled: true

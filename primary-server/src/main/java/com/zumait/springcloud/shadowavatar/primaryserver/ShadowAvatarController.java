@@ -61,4 +61,10 @@ public class ShadowAvatarController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/route/refresh", method = RequestMethod.GET)
+    public ResponseEntity refreshRoutes() {
+        refreshRouteService.refreshRoute();
+        return ResponseEntity.ok().build();
+    }
+
 }

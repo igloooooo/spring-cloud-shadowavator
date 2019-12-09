@@ -10,3 +10,12 @@ eureka:
       defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8700/eureka/}
     registerWithEureka: true
     fetchRegistry: true
+
+zuul:
+  routes:
+    service1:
+      path: /service1/**
+      url: http://localhost:8810/
+    service2:
+      path: /service2/**
+      url: http://localhost:8820/

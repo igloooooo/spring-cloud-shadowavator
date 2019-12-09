@@ -15,7 +15,7 @@ import org.springframework.web.util.UrlPathHelper;
 
 import java.util.Optional;
 
-@Component
+
 public class SleuthHeaderFilter extends ZuulFilter {
     private final Logger logger = LoggerFactory.getLogger(SleuthHeaderFilter.class);
 

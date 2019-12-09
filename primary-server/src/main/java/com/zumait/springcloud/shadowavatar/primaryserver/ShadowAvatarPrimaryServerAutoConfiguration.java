@@ -2,6 +2,9 @@ package com.zumait.springcloud.shadowavatar.primaryserver;
 
 import com.netflix.discovery.EurekaClientConfig;
 import com.zumait.springcloud.shadowavatar.primaryserver.filter.SleuthHeaderFilter;
+import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorTraceIDMapperService;
+import com.zumait.springcloud.shadowavatar.primaryserver.service.MirrorServerService;
+import com.zumait.springcloud.shadowavatar.primaryserver.service.RefreshRouteService;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -19,6 +22,7 @@ import org.springframework.cloud.client.actuator.HasFeatures;
 import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -29,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnBean(ShadowAvatarPrimaryServerMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties(ShadowAvatarPrimaryServerProperties.class)
-@ConditionalOnProperty(value = "spring.cloud.netflix.shadowavatar.primaryserver.enabled",
+@ConditionalOnProperty(value = "shadowavatar.primaryserver.enabled",
         matchIfMissing = true)
 public class ShadowAvatarPrimaryServerAutoConfiguration {
     @Bean
@@ -63,10 +67,24 @@ public class ShadowAvatarPrimaryServerAutoConfiguration {
         return new ShadowAvatarController();
     }
 
-//    @Bean
-//    public SleuthHeaderFilter sleuthHeaderFilter() {
-//        return new SleuthHeaderFilter();
-//    }
+    @Bean
+    public SleuthHeaderFilter sleuthHeaderFilter() {
+        return new SleuthHeaderFilter();
+    }
 
+    @Bean
+    public MirrorServerService mirrorServerService(){
+        return new MirrorServerService();
+    }
+
+    @Bean
+    public RefreshRouteService refreshRouteService(){
+        return new RefreshRouteService();
+    }
+
+    @Bean
+    public MirrorTraceIDMapperService mirrorTraceIDMapperService() {
+        return new MirrorTraceIDMapperService();
+    }
 
 }

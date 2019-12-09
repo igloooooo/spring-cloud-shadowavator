@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.stereotype.Component;
 
-@Component
+
 @Slf4j
 public class MirrorServerStopListener implements ApplicationListener<ContextStoppedEvent> {
     @Autowired

@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-@Service
+
 public class RefreshRouteService {
     @Autowired
     ApplicationEventPublisher publisher;

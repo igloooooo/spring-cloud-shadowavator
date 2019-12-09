@@ -4,13 +4,13 @@ import com.zumait.springcloud.shadowavatar.common.router.MirrorServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
 public class MirrorServerService {
 
     private static final Logger logger = LoggerFactory.getLogger(MirrorServerService.class);

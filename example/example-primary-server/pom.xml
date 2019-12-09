@@ -27,6 +27,7 @@
 			<groupId>com.zumait.springcloud.shadowavatar</groupId>
 			<artifactId>primary-server</artifactId>
 			<version>${shadowavatar.version}</version>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>

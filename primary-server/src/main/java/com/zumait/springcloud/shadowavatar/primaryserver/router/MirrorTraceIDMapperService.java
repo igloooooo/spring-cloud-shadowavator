@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 /**
  * @author Nicholas Zhu
  */
-@Service
 public class MirrorTraceIDMapperService {
     private Map<String, MirrorServer> mirrorServerMap = new ConcurrentHashMap<String, MirrorServer>();
 
