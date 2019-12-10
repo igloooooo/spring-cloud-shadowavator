@@ -18,5 +18,6 @@ public class MirrorServerStopListener implements ApplicationListener<ContextStop
         // unregister mirror server
         log.info("Mirror server stop. unregister from primary server");
         mirrorServerService.unregister();
+        System.out.println("event: " + contextStopEvent);
     }
 }

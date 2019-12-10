@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.zumait.springcloud.shadowavatar.mirrorserver.ShadowAvatarMirrorServerAutoConfiguration
+  com.zumait.springcloud.shadowavatar.mirrorserver.ShadowAvatarMirrorServerAutoConfiguration,\
+  com.zumait.springcloud.shadowavatar.mirrorserver.listener.MirrorServerStartUpListener

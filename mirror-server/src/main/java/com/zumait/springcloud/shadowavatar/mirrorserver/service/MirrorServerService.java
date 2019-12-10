@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.zuul.filters.SimpleRouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +22,7 @@ public class MirrorServerService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("mirrorserver.primaryserver")
+    @Value("${mirrorserver.primaryserver}")
     private String primaryServerURL;
 
     @Value("${spring.application.name}")
@@ -41,7 +44,12 @@ public class MirrorServerService {
             mr.setAppName(appName);
             return mr;
         }).collect(Collectors.toList()));
-        restTemplate.postForObject(primaryServerURL, mirrorServer, ResponseEntity.class, mirrorServer);
+        HttpHeaders headers = new HttpHeaders();
+        // can set the content Type
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<MirrorServer> request = new HttpEntity<>(mirrorServer, headers);
+        restTemplate.postForObject(primaryServerURL, request, ResponseEntity.class);
     }
 
     public void unregister() {
