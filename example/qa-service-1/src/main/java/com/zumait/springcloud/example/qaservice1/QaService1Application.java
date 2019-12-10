@@ -30,6 +30,6 @@ public class QaService1Application {
 	@RequestMapping(value = "/trace-1", method = RequestMethod.GET)
 	public String trace() {
 		log.info("this is call trace-1");
-		return restTemplate().getForEntity("http://localhost:8730/trace-2/trace-2", String.class).getBody();
+		return restTemplate().getForEntity("http://localhost:8730/service2/trace-2", String.class).getBody();
 	}
 }

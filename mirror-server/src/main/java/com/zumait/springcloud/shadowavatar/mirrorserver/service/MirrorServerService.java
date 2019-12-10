@@ -49,7 +49,7 @@ public class MirrorServerService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<MirrorServer> request = new HttpEntity<>(mirrorServer, headers);
-        restTemplate.postForObject(primaryServerURL, request, ResponseEntity.class);
+        restTemplate.postForEntity(primaryServerURL + "/register", request, ResponseEntity.class);
     }
 
     public void unregister() {

@@ -12,6 +12,8 @@ eureka:
     fetchRegistry: true
 
 zuul:
+  ignored-headers:
+  sensitive-headers:
   routes:
     service1:
       path: /service1/**

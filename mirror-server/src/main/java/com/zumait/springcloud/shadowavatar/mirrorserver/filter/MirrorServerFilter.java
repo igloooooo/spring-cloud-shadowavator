@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.POST_TYPE;
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
 
 /**
  * @author Nicholas Zhu
@@ -24,7 +24,7 @@ public class MirrorServerFilter extends ZuulFilter {
     }
     @Override
     public String filterType() {
-        return POST_TYPE;
+        return PRE_TYPE;
     }
 
     @Override
@@ -35,18 +35,15 @@ public class MirrorServerFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         RequestContext context = RequestContext.getCurrentContext();
-        List<Pair<String, String>> zuulResponseHeaders = context.getZuulResponseHeaders();
         return context.getThrowable() == null
-                && (!context.getZuulResponseHeaders().isEmpty()
-                && context.getZuulResponseHeaders().stream()
-                .anyMatch(pair -> pair.first().equalsIgnoreCase(ShadowAvatarConstant.MIRROR_SERVER_HEAD)));
+                && (context.getZuulRequestHeaders().isEmpty() || (!context.getZuulRequestHeaders().isEmpty()
+                && !context.getZuulRequestHeaders().containsKey(ShadowAvatarConstant.MIRROR_SERVER_HEAD)));
     }
 
     @Override
     public Object run() throws ZuulException {
         RequestContext context = RequestContext.getCurrentContext();
-        List<Pair<String, String>> zuulResponseHeaders = context.getZuulResponseHeaders();
-        zuulResponseHeaders.add(new Pair<String, String>(ShadowAvatarConstant.MIRROR_SERVER_HEAD, this.appName));
+        context.addZuulRequestHeader(ShadowAvatarConstant.MIRROR_SERVER_HEAD, this.appName);
         return null;
     }
 }

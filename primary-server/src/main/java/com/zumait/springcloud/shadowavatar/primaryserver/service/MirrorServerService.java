@@ -9,6 +9,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MirrorServerService {
@@ -20,9 +21,8 @@ public class MirrorServerService {
 
     public void registerMirrorServer(MirrorServer mirrorServer) {
         if (mirrorServerMap.containsKey(mirrorServer.getAppName())) {
-            logger.error("can NOT add existed app: " + mirrorServer.getRouters());
+            logger.warn("existed app: {} will be overwrite. ",  mirrorServer.getRouters());
         } else {
-
             mirrorServerMap.put(mirrorServer.getAppName(), mirrorServer);
         }
     }
@@ -43,5 +43,9 @@ public class MirrorServerService {
 
     public Map<String, MirrorServer> getMirrorServerMap() {
         return mirrorServerMap;
+    }
+
+    public Optional<MirrorServer> findMirrorServer(String appName) {
+        return Optional.ofNullable(mirrorServerMap.get(appName));
     }
 }

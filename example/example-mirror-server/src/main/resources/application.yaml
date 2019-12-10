@@ -12,10 +12,18 @@ eureka:
     fetchRegistry: true
 
 zuul:
+  ignored-headers:
+  sensitive-headers:
   routes:
     service2:
+      sensitiveHeaders:
       path: /service2/**
       url: http://localhost:8920/
+    default:
+      strip-prefix: true
+      sensitiveHeaders:
+      path: /**
+      url: http://localhost:8730
 
 mirrorserver:
   primaryserver: http://localhost:8730

@@ -1,5 +1,6 @@
 package com.zumait.springcloud.shadowavatar.example.devservice2;
 
+import com.zumait.springcloud.shadowavatar.common.ShadowAvatarConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +9,8 @@ import org.springframework.cloud.sleuth.SpanName;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @SpringBootApplication
 @RestController
@@ -21,7 +24,8 @@ public class DevService2Application {
 	}
 
 	@RequestMapping(value = "/trace-2", method = RequestMethod.GET)
-	public String trace() {
+	public String trace(HttpServletRequest req) {
+		log.info("request header: {}", req.getHeader(ShadowAvatarConstant.MIRROR_SERVER_HEAD));
 		log.info("this is call dev trace-2");
 		return "this is dev trace-2";
 	}

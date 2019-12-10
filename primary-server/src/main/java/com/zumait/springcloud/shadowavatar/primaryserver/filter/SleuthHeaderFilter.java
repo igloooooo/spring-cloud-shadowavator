@@ -2,6 +2,7 @@ package com.zumait.springcloud.shadowavatar.primaryserver.filter;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.zumait.springcloud.shadowavatar.common.ShadowAvatarConstant;
 import com.zumait.springcloud.shadowavatar.common.router.MirrorServer;
 import com.zumait.springcloud.shadowavatar.primaryserver.service.MirrorServerService;
 import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorTraceIDMapperService;
@@ -48,8 +49,15 @@ public class SleuthHeaderFilter extends ZuulFilter {
         RequestContext requestContext = RequestContext.getCurrentContext();
         logger.info("Sleuth Header [X-B3-SpanId]: " + requestContext.getRequest().getHeader("X-B3-SpanId"));
         logger.info("Sleuth Header [X-B3-TraceId]: " + requestContext.getRequest().getHeader("X-B3-TraceId"));
+        final Optional<String> mirrorServerName = Optional.ofNullable(
+                requestContext.getRequest().getHeader(ShadowAvatarConstant.MIRROR_SERVER_HEAD));
+
         Optional.ofNullable(requestContext.getRequest().getHeader("X-B3-TraceId"))
         .ifPresent(traceId -> {
+            // register mirror server
+            mirrorServerName.ifPresent(appName -> {
+                mirrorTraceIDMapperService.addTraceID(traceId, appName);
+            });
             // check if this traceId coming from mirror server and also match the mirror route table
             ifMatchMirrorServerRoute(traceId).ifPresent(mirrorServer -> {
                 // forward to mirror server
@@ -64,6 +72,6 @@ public class SleuthHeaderFilter extends ZuulFilter {
     }
 
     private Optional<MirrorServer> ifMatchMirrorServerRoute(String traceId){
-        return Optional.empty();
+        return mirrorTraceIDMapperService.getMirrorServer(traceId);
     }
 }
