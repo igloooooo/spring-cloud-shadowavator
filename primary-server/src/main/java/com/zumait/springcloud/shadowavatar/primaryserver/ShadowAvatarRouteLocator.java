@@ -21,7 +21,7 @@ public class ShadowAvatarRouteLocator extends SimpleRouteLocator implements Refr
 
     private ZuulProperties properties;
 
-    public void setJdbcTemplate(MirrorServerService mirrorServerService){
+    public void setMirrorServerService(MirrorServerService mirrorServerService){
         this.mirrorServerService = mirrorServerService;
     }
 
@@ -71,7 +71,7 @@ public class ShadowAvatarRouteLocator extends SimpleRouteLocator implements Refr
                     .map(route -> {
                         ZuulRoute zuulRoute = new ZuulRoute();
                         org.springframework.beans.BeanUtils.copyProperties(route,zuulRoute);
-                        zuulRoute.setPath("/" +route.getAppName() + "/" + zuulRoute.getPath());
+                        zuulRoute.setPath("/" +route.getAppName() + zuulRoute.getPath());
                         return zuulRoute;
                     });
         }).collect(Collectors.toMap(r -> r.getPath(),r -> r));

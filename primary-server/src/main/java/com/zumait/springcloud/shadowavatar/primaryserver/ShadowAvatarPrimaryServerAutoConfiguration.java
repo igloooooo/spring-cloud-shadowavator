@@ -16,11 +16,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.actuator.HasFeatures;
 import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
+import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +38,12 @@ import org.springframework.web.client.RestTemplate;
 @ConditionalOnProperty(value = "shadowavatar.primaryserver.enabled",
         matchIfMissing = true)
 public class ShadowAvatarPrimaryServerAutoConfiguration {
+
+    @Autowired
+    ZuulProperties zuulProperties;
+    @Autowired
+    ServerProperties server;
+
     @Bean
     public HasFeatures Feature() {
         return HasFeatures.namedFeature("ShadowAvatar Primary Server",
@@ -85,6 +93,13 @@ public class ShadowAvatarPrimaryServerAutoConfiguration {
     @Bean
     public MirrorTraceIDMapperService mirrorTraceIDMapperService() {
         return new MirrorTraceIDMapperService();
+    }
+
+    @Bean
+    public ShadowAvatarRouteLocator shadowAvatarRouteLocator (MirrorServerService mirrorServerService) {
+        ShadowAvatarRouteLocator routeLocator = new ShadowAvatarRouteLocator(this.server.getServlet().getContextPath(), this.zuulProperties);
+        routeLocator.setMirrorServerService(mirrorServerService);
+        return routeLocator;
     }
 
 }

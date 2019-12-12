@@ -11,10 +11,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
+import org.springframework.cloud.netflix.zuul.filters.pre.PreDecorationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UrlPathHelper;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Optional;
+
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.REQUEST_URI_KEY;
 
 
 public class SleuthHeaderFilter extends ZuulFilter {
@@ -38,7 +43,7 @@ public class SleuthHeaderFilter extends ZuulFilter {
     }
 
     public int filterOrder() {
-        return 6;
+        return 0;
     }
 
     public boolean shouldFilter() {
@@ -51,7 +56,7 @@ public class SleuthHeaderFilter extends ZuulFilter {
         logger.info("Sleuth Header [X-B3-TraceId]: " + requestContext.getRequest().getHeader("X-B3-TraceId"));
         final Optional<String> mirrorServerName = Optional.ofNullable(
                 requestContext.getRequest().getHeader(ShadowAvatarConstant.MIRROR_SERVER_HEAD));
-
+        final String url = requestContext.getRequest().getServletPath();
         Optional.ofNullable(requestContext.getRequest().getHeader("X-B3-TraceId"))
         .ifPresent(traceId -> {
             // register mirror server
@@ -59,11 +64,12 @@ public class SleuthHeaderFilter extends ZuulFilter {
                 mirrorTraceIDMapperService.addTraceID(traceId, appName);
             });
             // check if this traceId coming from mirror server and also match the mirror route table
-            ifMatchMirrorServerRoute(traceId).ifPresent(mirrorServer -> {
+            ifMatchMirrorServerRoute(traceId, url).ifPresent(mirrorServer -> {
                 // forward to mirror server
-                String newRequestURI = "/" + mirrorServer.getAppName() + "/"
-                        + urlPathHelper.getPathWithinApplication(requestContext.getRequest());
-                requestContext.set("requestURI", newRequestURI);
+                Object originalRequestPath = requestContext.get(REQUEST_URI_KEY);
+                String modifiedRequestPath = "/" + mirrorServer.getAppName() + url;
+                requestContext.set(REQUEST_URI_KEY, modifiedRequestPath);
+                requestContext.setRouteHost(this.getUrl("http://localhost:8920/"));
             });
         });
 
@@ -71,7 +77,17 @@ public class SleuthHeaderFilter extends ZuulFilter {
         return null;
     }
 
-    private Optional<MirrorServer> ifMatchMirrorServerRoute(String traceId){
-        return mirrorTraceIDMapperService.getMirrorServer(traceId);
+    private Optional<MirrorServer> ifMatchMirrorServerRoute(String traceId, String url){
+        return mirrorTraceIDMapperService.getMirrorServer(traceId).filter(mirrorServer -> {
+            return mirrorServerService.matchURL(mirrorServer.getAppName(), url);
+        });
+    }
+
+    private URL getUrl(String target) {
+        try {
+            return new URL(target);
+        } catch (MalformedURLException var3) {
+            throw new IllegalStateException("Target URL is malformed", var3);
+        }
     }
 }

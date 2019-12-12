@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.zumait.springcloud.shadowavatar.primaryserver.ShadowAvatarPrimaryServerAutoConfiguration
+  com.zumait.springcloud.shadowavatar.primaryserver.ShadowAvatarPrimaryServerAutoConfiguration,\
+  com.zumait.springcloud.shadowavatar.primaryserver.listener.ZuulRefreshListener

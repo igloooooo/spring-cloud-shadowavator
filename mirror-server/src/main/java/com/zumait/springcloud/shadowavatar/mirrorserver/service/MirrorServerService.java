@@ -61,7 +61,8 @@ public class MirrorServerService {
                 .map(r -> {
                     ZuulProperties.ZuulRoute zuulRoute = new ZuulProperties.ZuulRoute();
                     org.springframework.beans.BeanUtils.copyProperties(r,zuulRoute);
+                    zuulRoute.setPath(r.getFullPath());
                     return zuulRoute;
-                }).collect(Collectors.toList());
+                }).filter(r -> !r.getPath().equalsIgnoreCase("/**")).collect(Collectors.toList());
     }
 }

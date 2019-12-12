@@ -21,10 +21,9 @@ public class MirrorServerService {
 
     public void registerMirrorServer(MirrorServer mirrorServer) {
         if (mirrorServerMap.containsKey(mirrorServer.getAppName())) {
-            logger.warn("existed app: {} will be overwrite. ",  mirrorServer.getRouters());
-        } else {
-            mirrorServerMap.put(mirrorServer.getAppName(), mirrorServer);
+            logger.warn("existed app: {} will be overwrite. ", mirrorServer.getRouters());
         }
+        mirrorServerMap.put(mirrorServer.getAppName(), mirrorServer);
     }
 
     public void unRegisterMirrorServer(String app) {
@@ -35,11 +34,11 @@ public class MirrorServerService {
         }
     }
 
-//    public Optional<MirrorServer> matchURL(String url) {
-//        return mirrorServerMap.entrySet().stream().filter(entry ->
-//            entry.getValue().getRouters().stream().anyMatch(patten -> pathMatcher.match(patten, url))
-//        ).map(Map.Entry::getValue).findFirst();
-//    }
+    public boolean matchURL(String appName, String url) {
+        return Optional.ofNullable(mirrorServerMap.get(appName)).map(mirrorServer -> {
+            return mirrorServer.getRouters().stream().anyMatch(r -> pathMatcher.match(r.getPath(), url));
+        }).orElse(false);
+    }
 
     public Map<String, MirrorServer> getMirrorServerMap() {
         return mirrorServerMap;
