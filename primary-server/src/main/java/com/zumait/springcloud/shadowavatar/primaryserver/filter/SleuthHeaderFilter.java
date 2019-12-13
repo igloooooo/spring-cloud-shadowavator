@@ -4,16 +4,16 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.zumait.springcloud.shadowavatar.common.ShadowAvatarConstant;
 import com.zumait.springcloud.shadowavatar.common.router.MirrorServer;
-import com.zumait.springcloud.shadowavatar.primaryserver.service.MirrorServerService;
 import com.zumait.springcloud.shadowavatar.primaryserver.router.MirrorTraceIDMapperService;
+import com.zumait.springcloud.shadowavatar.primaryserver.service.MirrorServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
-import org.springframework.cloud.netflix.zuul.filters.pre.PreDecorationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UrlPathHelper;
+import org.springframework.web.util.WebUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,6 +32,12 @@ public class SleuthHeaderFilter extends ZuulFilter {
     private ZuulProperties properties;
 
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
+
+    public SleuthHeaderFilter(RouteLocator routeLocator, String dispatcherServletPath, ZuulProperties properties) {
+        this.routeLocator = routeLocator;
+        this.dispatcherServletPath = dispatcherServletPath;
+        this.properties = properties;
+    }
 
     @Autowired
     private MirrorServerService mirrorServerService;
@@ -58,26 +64,28 @@ public class SleuthHeaderFilter extends ZuulFilter {
                 requestContext.getRequest().getHeader(ShadowAvatarConstant.MIRROR_SERVER_HEAD));
         final String url = requestContext.getRequest().getServletPath();
         Optional.ofNullable(requestContext.getRequest().getHeader("X-B3-TraceId"))
-        .ifPresent(traceId -> {
-            // register mirror server
-            mirrorServerName.ifPresent(appName -> {
-                mirrorTraceIDMapperService.addTraceID(traceId, appName);
-            });
-            // check if this traceId coming from mirror server and also match the mirror route table
-            ifMatchMirrorServerRoute(traceId, url).ifPresent(mirrorServer -> {
-                // forward to mirror server
-                Object originalRequestPath = requestContext.get(REQUEST_URI_KEY);
-                String modifiedRequestPath = "/" + mirrorServer.getAppName() + url;
-                requestContext.set(REQUEST_URI_KEY, modifiedRequestPath);
-                requestContext.setRouteHost(this.getUrl("http://localhost:8920/"));
-            });
-        });
+                .ifPresent(traceId -> {
+                    // register mirror server
+                    mirrorServerName.ifPresent(appName -> {
+                        mirrorTraceIDMapperService.addTraceID(traceId, appName);
+                    });
+                    // check if this traceId coming from mirror server and also match the mirror route table
+                    ifMatchMirrorServerRoute(traceId, url).ifPresent(mirrorServer -> {
+                        // forward to mirror server
+                        Object originalRequestPath = requestContext.get(REQUEST_URI_KEY);
+                        String modifiedRequestPath = "/" + mirrorServer.getAppName() + url;
+                        Route route = this.routeLocator.getMatchingRoute(modifiedRequestPath);
+                        if (route != null) {
+                            requestContext.getRequest().setAttribute(WebUtils.INCLUDE_REQUEST_URI_ATTRIBUTE, modifiedRequestPath);
+                        }
+                    });
+                });
 
 
         return null;
     }
 
-    private Optional<MirrorServer> ifMatchMirrorServerRoute(String traceId, String url){
+    private Optional<MirrorServer> ifMatchMirrorServerRoute(String traceId, String url) {
         return mirrorTraceIDMapperService.getMirrorServer(traceId).filter(mirrorServer -> {
             return mirrorServerService.matchURL(mirrorServer.getAppName(), url);
         });

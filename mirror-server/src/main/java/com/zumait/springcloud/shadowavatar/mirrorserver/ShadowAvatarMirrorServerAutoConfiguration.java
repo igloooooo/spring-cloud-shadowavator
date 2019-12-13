@@ -1,7 +1,6 @@
 package com.zumait.springcloud.shadowavatar.mirrorserver;
 
 import com.zumait.springcloud.shadowavatar.mirrorserver.filter.MirrorServerFilter;
-import com.zumait.springcloud.shadowavatar.mirrorserver.listener.MirrorServerStartUpListener;
 import com.zumait.springcloud.shadowavatar.mirrorserver.listener.MirrorServerStopListener;
 import com.zumait.springcloud.shadowavatar.mirrorserver.service.MirrorServerService;
 import org.apache.http.client.HttpClient;
@@ -76,12 +75,8 @@ public class ShadowAvatarMirrorServerAutoConfiguration {
     }
 
     @Bean
-    public MirrorServerStartUpListener mirrorServerStartUpListener() {
-        return new MirrorServerStartUpListener();
+    public MirrorServerStopListener mirrorServerStopListener(MirrorServerService mirrorServerService) {
+        return new MirrorServerStopListener(mirrorServerService);
     }
 
-    @Bean
-    public MirrorServerStopListener mirrorServerStopListener() {
-        return new MirrorServerStopListener();
-    }
 }
