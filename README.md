@@ -10,7 +10,7 @@ Primary server is an API gateway to governor test environment. All microservices
 Mirror server is an API gateway for local developer environment. All local developing microservice can be accessed via it.
 
 ### Context
-
+![image](https://github.com/igloooooo/spring-cloud-shadowavator/blob/master/doc/image/ShadowAvatar-context.png)
 
 ### How to run
 Include dependency
